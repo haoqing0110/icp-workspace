@@ -14,4 +14,5 @@ ansible master -i $CLUSTER_DIR/hosts -e @$CLUSTER_DIR/config.yaml --private-key=
 echo "------Restart the docker service.------"
 ansible master -i $CLUSTER_DIR/hosts -e @$CLUSTER_DIR/config.yaml --private-key=$CLUSTER_DIR/ssh_key -m service -a "name=docker state=restarted"
 echo "------Purge etcd data.------"
-ansible master -i $CLUSTER_DIR/hosts -e @$CLUSTER_DIR/config.yaml --private-key=$CLUSTER_DIR/ssh_key -m shell -a "rm -rf /var/lib/etcd"
+ansible master -i $CLUSTER_DIR/hosts -e @$CLUSTER_DIR/config.yaml --private-key=$CLUSTER_DIR/ssh_key -m shell -a "mv /var/lib/etcd /var/lib/etcd-bk"
+ansible master -i $CLUSTER_DIR/hosts -e @$CLUSTER_DIR/config.yaml --private-key=$CLUSTER_DIR/ssh_key -m shell -a "mv /var/lib/etcd-wal /var/lib/etcd-wal-bk"
