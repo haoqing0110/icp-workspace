@@ -5,6 +5,8 @@ ansible master -i $CLUSTER_DIR/hosts -e @$CLUSTER_DIR/config.yaml --private-key=
 echo "------Restore the snapshot on all master nodes.------"
 ansible master -i $CLUSTER_DIR/hosts -e @$CLUSTER_DIR/config.yaml --private-key=$CLUSTER_DIR/ssh_key -m script -a "./multimaster-etcd-restore.sh"
 ansible master -i $CLUSTER_DIR/hosts -e @$CLUSTER_DIR/config.yaml --private-key=$CLUSTER_DIR/ssh_key -m shell -a "mv /var/lib/etcd/restored/* /var/lib/etcd/"
+ansible master -i $CLUSTER_DIR/hosts -e @$CLUSTER_DIR/config.yaml --private-key=$CLUSTER_DIR/ssh_key -m shell -a "mkdir /var/lib/etcd-wal/"
+ansible master -i $CLUSTER_DIR/hosts -e @$CLUSTER_DIR/config.yaml --private-key=$CLUSTER_DIR/ssh_key -m shell -a "mv /var/lib/etcd/member/wal/ /var/lib/etcd-wal/"
 echo "------Purge kubelet pods data.------"
 ansible master -i $CLUSTER_DIR/hosts -e @$CLUSTER_DIR/config.yaml --private-key=$CLUSTER_DIR/ssh_key -m script -a "./purge_kubelet_pods.sh"
 echo "------Re-enable kubelet and etcd Pod.------"
